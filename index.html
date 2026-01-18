@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AL Hind News - Multilingual News App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: #ff9800;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .language-selector {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .lang-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn.active {
+            background: #ff9800;
+            font-weight: 600;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .lang-btn.active:hover {
+            background: #f57c00;
+        }
+        
+        .news-sources {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .source-tag {
+            padding: 6px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .source-tag i {
+            color: #ff9800;
+        }
+        
+        .content-type {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .content-btn {
+            padding: 10px 20px;
+            background: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .content-btn.active {
+            background: #1a237e;
+            color: white;
+        }
+        
+        .content-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .auto-update-info {
+            display: flex;
+            align-items: center;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .auto-update-info i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .news-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .news-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .news-content {
+            padding: 20px;
+        }
+        
+        .news-source {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .source-name {
+            color: #1a237e;
+            font-weight: 600;
+            padding: 4px 10px;
+            background: #e8eaf6;
+            border-radius: 4px;
+        }
+        
+        .news-time {
+            color: #777;
+        }
+        
+        .news-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .news-excerpt {
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .news-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .news-type {
+            padding: 5px 12px;
+            background: #ff9800;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .read-more {
+            color: #1a237e;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .video-card {
+            grid-column: span 2;
+        }
+        
+        .video-player {
+            position: relative;
+            height: 300px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .play-button {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button i {
+            color: #1a237e;
+            font-size: 30px;
+            margin-left: 5px;
+        }
+        
+        .play-button:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #777;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-card {
+                grid-column: span 1;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .content-type {
+                justify-content: center;
+            }
+        }
+        
+        .demo-note {
+            background: #fff8e1;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">
+                    <i class="fas fa-globe-asia"></i>
+                    <h1>AL Hind News</h1>
+                </div>
+                
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="en">English</button>
+                    <button class="lang-btn" data-lang="hi">हिन्दी</button>
+                    <button class="lang-btn" data-lang="ur">اردو</button>
+                    <button class="lang-btn" data-lang="ar">العربية</button>
+                </div>
+            </div>
+            
+            <p>Your trusted multilingual news source with automatic updates</p>
+            
+            <div class="news-sources">
+                <div class="source-tag"><i class="fas fa-broadcast-tower"></i> BBC</div>
+                <div class="source-tag"><i class="fas fa-satellite-dish"></i> Al Jazeera</div>
+                <div class="source-tag"><i class="fas fa-tv"></i> India Today</div>
+                <div class="source-tag"><i class="far fa-newspaper"></i> New York Times</div>
+                <div class="source-tag"><i class="fas fa-desktop"></i> Bharat Times</div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="demo-note">
+            <strong>Note:</strong> This is a design concept for the AL Hind News app. In a real implementation, the news would be automatically fetched from the mentioned sources via APIs and updated in real-time.
+        </div>
+        
+        <div class="content-type">
+            <button class="content-btn active" data-type="all">
+                <i class="fas fa-th-large"></i> All News
+            </button>
+            <button class="content-btn" data-type="text">
+                <i class="fas fa-newspaper"></i> Reading News
+            </button>
+            <button class="content-btn" data-type="video">
+                <i class="fas fa-play-circle"></i> Video News
+            </button>
+        </div>
+        
+        <div class="auto-update-info">
+            <i class="fas fa-sync-alt"></i>
+            <span>News updates automatically every 15 minutes. Last updated: <span id="update-time">Just now</span></span>
+        </div>
+        
+        <div class="news-grid">
+            <!-- News Article 1 -->
+            <div class="news-card" data-type="text" data-source="bbc">
+                <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="News Image" class="news-image">
+                <div class="news-content">
+                    <div class="news-source">
+                        <span class="source-name">BBC News</span>
+                        <span class="news-time">2 hours ago</span>
+                    </div>
+                    <h3 class="news-title">Global Climate Summit Reaches Historic Agreement</h3>
+                    <p class="news-excerpt">World leaders have agreed on a landmark climate deal that sets ambitious targets for reducing carbon emissions by 2030.</p>
+                    <div class="news-footer">
+                        <span class="news-type">Article</span>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- News Article 2 -->
+            <div class="news-card" data-type="text" data-source="aljazeera">
+                <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="News Image" class="news-image">
+                <div class="news-content">
+                    <div class="news-source">
+                        <span class="source-name">Al Jazeera</span>
+                        <span class="news-time">4 hours ago</span>
+                    </div>
+                    <h3 class="news-title">Middle East Peace Talks Show Promising Progress</h3>
+                    <p class="news-excerpt">Diplomatic efforts in the region have yielded significant breakthroughs with all parties showing willingness to compromise.</p>
+                    <div class="news-footer">
+                        <span class="news-type">Article</span>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video News 1 -->
+            <div class="news-card video-card" data-type="video" data-source="indiatoday">
+                <div class="video-player">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Video Thumbnail" class="news-image">
+                </div>
+                <div class="news-content">
+                    <div class="news-source">
+                        <span class="source-name">India Today</span>
+                        <span class="news-time">1 day ago</span>
+                    </div>
+                    <h3 class="news-title">India's Space Mission Achieves New Milestone</h3>
+                    <p class="news-excerpt">Exclusive coverage of India's latest space mission that successfully placed three satellites into orbit.</p>
+                    <div class="news-footer">
+                        <span class="news-type">Video Report</span>
+                        <a href="#" class="read-more">Watch Now <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- News Article 3 -->
+            <div class="news-card" data-type="text" data-source="nytimes">
+                <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="News Image" class="news-image">
+                <div class="news-content">
+                    <div class="news-source">
+                        <span class="source-name">New York Times</span>
+                        <span class="news-time">6 hours ago</span>
+                    </div>
+                    <h3 class="news-title">Tech Giants Announce Breakthrough in AI Research</h3>
+                    <p class="news-excerpt">Collaboration between leading tech companies has resulted in significant advancements in artificial intelligence safety.</p>
+                    <div class="news-footer">
+                        <span class="news-type">Article</span>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- News Article 4 -->
+            <div class="news-card" data-type="text" data-source="bharattimes">
+                <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="News Image" class="news-image">
+                <div class="news-content">
+                    <div class="news-source">
+                        <span class="source-name">Bharat Times</span>
+                        <span class="news-time">8 hours ago</span>
+                    </div>
+                    <h3 class="news-title">New Economic Policy to Boost Rural Development</h3>
+                    <p class="news-excerpt">Government announces comprehensive plan to accelerate growth in rural areas through infrastructure and job creation.</p>
+                    <div class="news-footer">
+                        <span class="news-type">Article</span>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video News 2 -->
+            <div class="news-card" data-type="video" data-source="aljazeera">
+                <div class="video-player">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Video Thumbnail" class="news-image">
+                </div>
+                <div class="news-content">
+                    <div class="news-source">
+                        <span class="source-name">Al Jazeera</span>
+                        <span class="news-time">2 days ago</span>
+                    </div>
+                    <h3 class="news-title">Cultural Festival Showcases Regional Diversity</h3>
+                    <p class="news-excerpt">Annual cultural event brings together artists and performers from across the region to celebrate traditional arts.</p>
+                    <div class="news-footer">
+                        <span class="news-type">Video Report</span>
+                        <a href="#" class="read-more">Watch Now <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>AL Hind News &copy; 2023 | Automatic updates from BBC, Al Jazeera, India Today, New York Times, and Bharat Times</p>
+            <p>Available in Hindi, English, Urdu, and Arabic</p>
+        </footer>
+    </div>
+
+    <script>
+        // Language switching functionality
+        const langButtons = document.querySelectorAll('.lang-btn');
+        const contentButtons = document.querySelectorAll('.content-btn');
+        const newsCards = document.querySelectorAll('.news-card');
+        const updateTimeElement = document.getElementById('update-time');
+        
+        // Simulate automatic update time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            updateTimeElement.textContent = `${timeString}`;
+        }
+        
+        // Update time every minute
+        updateTime();
+        setInterval(updateTime, 60000);
+        
+        // Language switching
+        langButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all language buttons
+                langButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // In a real app, this would change the language of all text content
+                const lang = this.getAttribute('data-lang');
+                console.log(`Language changed to: ${lang}`);
+                
+                // Show language change confirmation
+                const langNames = {
+                    'en': 'English',
+                    'hi': 'Hindi',
+                    'ur': 'Urdu',
+                    'ar': 'Arabic'
+                };
+                
+                alert(`Language switched to ${langNames[lang]}. In a real app, all content would now be displayed in ${langNames[lang]}.`);
+            });
+        });
+        
+        // Content filtering (All/Text/Video)
+        contentButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all content buttons
+                contentButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const contentType = this.getAttribute('data-type');
+                
+                // Show/hide news cards based on type
+                newsCards.forEach(card => {
+                    if (contentType === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const cardType = card.getAttribute('data-type');
+                        if (cardType === contentType) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Simulate automatic news updates
+        function simulateAutoUpdate() {
+            console.log("Simulating automatic news update...");
+            
+            // In a real app, this would fetch new data from APIs
+            // For this demo, we'll just show a notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                animation: slideIn 0.5s ease;
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas fa-sync-alt"></i>
+                <span>News feed updated with latest stories</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => notification.remove(), 500);
+            }, 5000);
+            
+            // Add CSS for animations
+            if (!document.querySelector('#notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
+        // Simulate updates every 30 seconds for demo purposes
+        setInterval(simulateAutoUpdate, 30000);
+        
+        // Play button functionality
+        document.querySelectorAll('.play-button').forEach(button => {
+            button.addEventListener('click', function() {
+                alert("In a real app, this would play the video news report.");
+            });
+        });
+        
+        // Read more button functionality
+        document.querySelectorAll('.read-more').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert("In a real app, this would open the full article or video.");
+            });
+        });
+    </script>
+</body>
+</html>
